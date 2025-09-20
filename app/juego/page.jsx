@@ -32,13 +32,14 @@ export default function Juego() {
 
       // Solo aceptar letras A-Z (mayúsculas y minúsculas)
       if (/^[a-zA-Z]$/.test(key) && key.length === 1) {
-        handleKeyPress(key.toUpperCase());
+        const newState = guessLetter(gameState, key.toLowerCase());
+        setGameState(newState);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [gameState]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
