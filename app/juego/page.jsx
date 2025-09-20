@@ -2,13 +2,14 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import SPRITE_MONIGOTE from "../constants/images";
+import { createGameState } from "../lib/gameState.js";
+import { guessLetter } from "../lib/gameActions.js";
+import { ALPHABET } from "../lib/constants.js";
 
 export default function Juego() {
   const router = useRouter();
-  const [currentKey, setCurrentKey] = useState("");
-  const [showKey, setShowKey] = useState(false);
+  const [gameState, setGameState] = useState(() => createGameState());
   const [isMobile, setIsMobile] = useState(false);
-  const [monigoteLevel, setMonigoteLevel] = useState(0); // Estado inicial del monigote
 
   // Detectar si es dispositivo móvil
   useEffect(() => {
@@ -26,15 +27,19 @@ export default function Juego() {
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
+  // Navegar a game-over cuando el juego termine
+  useEffect(() => {
+    if (gameState.status === "won" || gameState.status === "lost") {
+      router.push(
+        `/game-over?result=${gameState.status}&word=${gameState.word}`
+      );
+    }
+  }, [gameState.status, gameState.word, router]);
+
   // Función para manejar la pulsación de teclas
   const handleKeyPress = (key) => {
-    setCurrentKey(key.toUpperCase());
-    setShowKey(true);
-
-    // Ocultar la tecla después de 5 segundos
-    setTimeout(() => {
-      setShowKey(false);
-    }, 5000);
+    const newState = guessLetter(gameState, key.toLowerCase());
+    setGameState(newState);
   };
 
   // Escuchar eventos del teclado
@@ -70,8 +75,8 @@ export default function Juego() {
           <div className="flex items-center justify-center bg-white rounded-lg shadow-lg p-8">
             <div className="w-64 h-64 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
               <img
-                src={SPRITE_MONIGOTE[monigoteLevel]}
-                alt={`Estado del ahorcado: ${monigoteLevel}`}
+                src={SPRITE_MONIGOTE[gameState.wrongGuesses]}
+                alt={`Estado del ahorcado: ${gameState.wrongGuesses}`}
                 className="w-full h-full object-contain"
               />
             </div>
@@ -80,20 +85,44 @@ export default function Juego() {
           {/* Derecha: Cuadros para letras */}
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h2 className="text-2xl font-bold mb-6 text-center">Palabra</h2>
-            <div className="grid grid-cols-8 gap-2 mb-8">
-              {Array.from({ length: 8 }, (_, i) => (
+            <div
+              className={`grid gap-2 mb-8 ${
+                gameState.word.length > 8 ? "grid-cols-10" : "grid-cols-8"
+              }`}
+            >
+              {gameState.revealed.map((letter, i) => (
                 <div
                   key={i}
                   className="w-12 h-12 border-2 border-gray-300 rounded-lg flex items-center justify-center text-xl font-bold bg-white"
                 >
-                  {/* Placeholder vacío */}
+                  {letter}
                 </div>
               ))}
             </div>
 
-            {/* Texto "Escriba una letra" */}
+            {/* Texto "Escriba una letra o haga clic en una letra abajo" */}
             <div className="text-center mb-4">
-              <p className="text-lg text-gray-600">Escriba una letra</p>
+              <p className="text-lg text-gray-600">
+                Escriba una letra o haga clic en una letra abajo
+              </p>
+            </div>
+
+            {/* Botones para letras A-Z */}
+            <div className="grid grid-cols-13 gap-1 mb-4">
+              {ALPHABET.map((letter) => (
+                <button
+                  key={letter}
+                  onClick={() => handleKeyPress(letter)}
+                  disabled={gameState.guessedLetters.has(letter)}
+                  className={`w-8 h-8 border-2 rounded-lg flex items-center justify-center text-sm font-bold transition duration-300 ${
+                    gameState.guessedLetters.has(letter)
+                      ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-700 text-white cursor-pointer"
+                  }`}
+                >
+                  {letter.toUpperCase()}
+                </button>
+              ))}
             </div>
 
             {/* Botón para abrir teclado en móviles - solo visible en móviles */}
@@ -119,18 +148,6 @@ export default function Juego() {
             )}
           </div>
         </div>
-
-        {/* Mostrar tecla pulsada en tarjeta inferior */}
-        {showKey && (
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 text-center border-2 border-blue-500">
-              <div className="text-6xl font-bold text-blue-600 mb-2">
-                {currentKey}
-              </div>
-              <p className="text-sm text-gray-600">Tecla pulsada</p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

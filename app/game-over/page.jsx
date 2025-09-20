@@ -1,22 +1,24 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function GameOver() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const gameResult = "victoria"; // Esto sería dinámico en el futuro
+  const gameResult = searchParams.get("result") || "victoria";
+  const word = searchParams.get("word") || "";
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">
-          {gameResult === "victoria" ? "¡Victoria!" : "Derrota"}
+          {gameResult === "won" ? "¡Victoria!" : "Derrota"}
         </h1>
 
         <p className="text-lg text-gray-600 mb-8">
-          {gameResult === "victoria"
+          {gameResult === "won"
             ? "¡Felicidades! Has ganado el juego."
-            : "Lo siento, has perdido. ¡Inténtalo de nuevo!"}
+            : `Lo siento, has perdido. La palabra era: ${word}. ¡Inténtalo de nuevo!`}
         </p>
 
         {/* Espacio para estadísticas */}
