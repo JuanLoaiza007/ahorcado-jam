@@ -1,7 +1,8 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function GameOver() {
+function GameOverContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -37,5 +38,23 @@ export default function GameOver() {
         </div>
       </div>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
+        <p className="text-lg text-gray-600">Cargando...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function GameOver() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <GameOverContent />
+    </Suspense>
   );
 }
