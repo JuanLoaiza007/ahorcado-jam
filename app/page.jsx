@@ -6,11 +6,11 @@ export default function Home() {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center"
-      style={{ backgroundImage: "url('/background.jpg')" }}
+      className="min-h-screen bg-cover bg-center bg-no-repeat flex items-start justify-center pt-8"
+      style={{ backgroundImage: "url('/images/home/ahorcado.png')" }}
     >
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-white mb-8 drop-shadow-lg">
+        <h1 className="text-4xl font-bold text-black mb-8 drop-shadow-lg">
           Juego del Ahorcado
         </h1>
         <button
