@@ -34,9 +34,12 @@ export default function Juego() {
         bestStreak: Math.max(prevStats.bestStreak, prevStats.currentStreak + 1),
       }));
 
-      // Reiniciar juego con nueva palabra después de un breve delay (reducido)
+      // Reiniciar juego con nueva palabra pero mantener los errores acumulados
       setTimeout(() => {
-        setGameState(createGameState());
+        const newGameState = createGameState();
+        // Mantener los errores acumulados de la sesión anterior
+        newGameState.wrongGuesses = gameState.wrongGuesses;
+        setGameState(newGameState);
       }, 800);
     } else if (gameState.status === "lost") {
       // Actualizar estadísticas por derrota y navegar

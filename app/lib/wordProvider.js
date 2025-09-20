@@ -151,5 +151,12 @@ const WORDS = [
  */
 export function getRandomWord() {
   const idx = Math.floor(Math.random() * WORDS.length);
-  return WORDS[idx];
+  const selectedWord = WORDS[idx];
+
+  // Imprimir la palabra solo en entorno de desarrollo
+  if (process.env.NEXT_PUBLIC_ENVIRONMENT === "develop") {
+    console.log("Palabra a adivinar:", selectedWord);
+  }
+
+  return selectedWord;
 }
