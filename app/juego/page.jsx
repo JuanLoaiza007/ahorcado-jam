@@ -18,6 +18,12 @@ export default function Juego() {
   }));
   const [showExitModal, setShowExitModal] = useState(false);
   const [wordsGuessed, setWordsGuessed] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  // Evitar discrepancias de hidratación
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Manejar fin del juego
   useEffect(() => {
@@ -114,11 +120,17 @@ export default function Juego() {
         </div>
 
         {/* Contador de palabras adivinadas */}
-        <div className="bg-green-100 border-2 border-green-300 rounded-lg px-4 py-2">
+        <div
+          className="bg-green-100 border-2 border-green-300 rounded-lg px-4 py-2"
+          suppressHydrationWarning
+        >
           <div className="text-sm text-green-700 font-medium">
             Palabras Adivinadas
           </div>
-          <div className="text-2xl font-bold text-green-800">
+          <div
+            className="text-2xl font-bold text-green-800"
+            suppressHydrationWarning
+          >
             {wordsGuessed}
           </div>
         </div>
@@ -133,6 +145,7 @@ export default function Juego() {
                 src={SPRITE_MONIGOTE[gameState.wrongGuesses]}
                 alt={`Estado del ahorcado: ${gameState.wrongGuesses}`}
                 className="w-full h-full object-contain"
+                suppressHydrationWarning
               />
             </div>
           </div>
@@ -144,11 +157,13 @@ export default function Juego() {
               className={`grid gap-2 mb-8 ${
                 gameState.word.length > 8 ? "grid-cols-10" : "grid-cols-8"
               }`}
+              suppressHydrationWarning
             >
               {gameState.revealed.map((letter, i) => (
                 <div
                   key={i}
                   className="w-12 h-12 border-2 border-gray-300 rounded-lg flex items-center justify-center text-xl font-bold bg-white"
+                  suppressHydrationWarning
                 >
                   {letter}
                 </div>
@@ -163,7 +178,10 @@ export default function Juego() {
             </div>
 
             {/* Botones para letras A-Z */}
-            <div className="grid grid-cols-13 gap-1 mb-4">
+            <div
+              className="grid grid-cols-13 gap-1 mb-4"
+              suppressHydrationWarning
+            >
               {ALPHABET.map((letter) => (
                 <button
                   key={letter}
@@ -174,6 +192,7 @@ export default function Juego() {
                       ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                       : "bg-blue-500 hover:bg-blue-700 text-white cursor-pointer"
                   }`}
+                  suppressHydrationWarning
                 >
                   {letter.toUpperCase()}
                 </button>
