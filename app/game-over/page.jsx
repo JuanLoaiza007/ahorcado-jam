@@ -21,31 +21,6 @@ export default function GameOver() {
             : `Lo siento, has perdido. La palabra era: ${word}. ¡Inténtalo de nuevo!`}
         </p>
 
-        {/* Espacio para estadísticas */}
-        <div className="bg-gray-50 rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-            Estadísticas
-          </h2>
-          <div className="space-y-2 text-left">
-            <div className="flex justify-between">
-              <span>Juegos jugados:</span>
-              <span className="font-bold">0</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Victorias:</span>
-              <span className="font-bold">0</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Derrotas:</span>
-              <span className="font-bold">0</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Mejor racha:</span>
-              <span className="font-bold">0</span>
-            </div>
-          </div>
-        </div>
-
         <div className="space-x-4">
           <button
             onClick={() => router.push("/juego")}
