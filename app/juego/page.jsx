@@ -93,15 +93,16 @@ export default function Juego() {
   }, [gameState]);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gray-100 p-2 sm:p-4">
       {/* Barra superior con botones y contador */}
-      <div className="max-w-6xl mx-auto mb-4 flex justify-between items-center">
-        <div className="flex items-center space-x-4">
+      <div className="max-w-6xl mx-auto mb-2 sm:mb-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
           <button
             onClick={() => setShowExitModal(true)}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-lg transition duration-300 text-sm sm:text-base"
           >
-            Volver al Menú Principal
+            <span className="sm:hidden">Salir</span>
+            <span className="hidden sm:inline">Volver al Menú Principal</span>
           </button>
 
           {/* Botón para ver estadísticas */}
@@ -113,22 +114,24 @@ export default function Juego() {
                 )}`
               );
             }}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-lg transition duration-300 text-sm sm:text-base"
           >
-            Ver Estadísticas
+            <span className="sm:hidden">Stats</span>
+            <span className="hidden sm:inline">Ver Estadísticas</span>
           </button>
         </div>
 
         {/* Contador de palabras adivinadas */}
         <div
-          className="bg-green-100 border-2 border-green-300 rounded-lg px-4 py-2"
+          className="bg-green-100 border-2 border-green-300 rounded-lg px-2 sm:px-4 py-1 sm:py-2"
           suppressHydrationWarning
         >
-          <div className="text-sm text-green-700 font-medium">
-            Palabras Adivinadas
+          <div className="text-xs sm:text-sm text-green-700 font-medium">
+            <span className="sm:hidden">Adivinadas</span>
+            <span className="hidden sm:inline">Palabras Adivinadas</span>
           </div>
           <div
-            className="text-2xl font-bold text-green-800"
+            className="text-xl sm:text-2xl font-bold text-green-800"
             suppressHydrationWarning
           >
             {wordsGuessed}
@@ -137,10 +140,10 @@ export default function Juego() {
       </div>
 
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
           {/* Izquierda: Espacio para imagen del ahorcado */}
-          <div className="flex items-center justify-center bg-white rounded-lg shadow-lg p-8">
-            <div className="w-64 h-64 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+          <div className="flex items-center justify-center bg-white rounded-lg shadow-lg p-4 sm:p-8">
+            <div className="w-48 h-48 sm:w-64 sm:h-64 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
               <img
                 src={SPRITE_MONIGOTE[gameState.wrongGuesses]}
                 alt={`Estado del ahorcado: ${gameState.wrongGuesses}`}
@@ -151,10 +154,12 @@ export default function Juego() {
           </div>
 
           {/* Derecha: Cuadros para letras */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold mb-6 text-center">Palabra</h2>
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-8">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center">
+              Palabra
+            </h2>
             <div
-              className={`grid gap-2 mb-8 ${
+              className={`grid gap-1 sm:gap-2 mb-6 sm:mb-8 ${
                 gameState.word.length > 8 ? "grid-cols-10" : "grid-cols-8"
               }`}
               suppressHydrationWarning
@@ -162,7 +167,7 @@ export default function Juego() {
               {gameState.revealed.map((letter, i) => (
                 <div
                   key={i}
-                  className="w-12 h-12 border-2 border-gray-300 rounded-lg flex items-center justify-center text-xl font-bold bg-white"
+                  className="w-8 h-8 sm:w-12 sm:h-12 border-2 border-gray-300 rounded-lg flex items-center justify-center text-lg sm:text-xl font-bold bg-white"
                   suppressHydrationWarning
                 >
                   {letter}
@@ -171,15 +176,20 @@ export default function Juego() {
             </div>
 
             {/* Texto "Escriba una letra o haga clic en una letra abajo" */}
-            <div className="text-center mb-4">
-              <p className="text-lg text-gray-600">
-                Escriba una letra o haga clic en una letra abajo
+            <div className="text-center mb-3 sm:mb-4">
+              <p className="text-sm sm:text-lg text-gray-600">
+                <span className="sm:hidden">
+                  Escriba una letra o toque abajo
+                </span>
+                <span className="hidden sm:inline">
+                  Escriba una letra o haga clic en una letra abajo
+                </span>
               </p>
             </div>
 
             {/* Botones para letras A-Z */}
             <div
-              className="grid grid-cols-13 gap-1 mb-4"
+              className="grid grid-cols-6 sm:grid-cols-9 md:grid-cols-13 gap-1 mb-3 sm:mb-4"
               suppressHydrationWarning
             >
               {ALPHABET.map((letter) => (
@@ -187,7 +197,7 @@ export default function Juego() {
                   key={letter}
                   onClick={() => handleKeyPress(letter)}
                   disabled={gameState.guessedLetters.has(letter)}
-                  className={`w-8 h-8 border-2 rounded-lg flex items-center justify-center text-sm font-bold transition duration-300 ${
+                  className={`w-6 h-6 sm:w-8 sm:h-8 border-2 rounded-lg flex items-center justify-center text-xs sm:text-sm font-bold transition duration-300 ${
                     gameState.guessedLetters.has(letter)
                       ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                       : "bg-blue-500 hover:bg-blue-700 text-white cursor-pointer"
@@ -204,26 +214,26 @@ export default function Juego() {
 
       {/* Modal de confirmación de salida */}
       {showExitModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md mx-4 shadow-xl">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 sm:p-8 max-w-md w-full shadow-xl">
+            <h2 className="text-lg sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">
               ¿Salir del juego?
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
               Si sales ahora, perderás tu progreso actual y las estadísticas no
               se guardarán. ¿Estás seguro de que quieres volver al menú
               principal?
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3 sm:space-x-4">
               <button
                 onClick={() => setShowExitModal(false)}
-                className="flex-1 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+                className="flex-1 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-3 sm:px-4 rounded-lg transition duration-300 text-sm sm:text-base"
               >
                 Cancelar
               </button>
               <button
                 onClick={() => router.push("/")}
-                className="flex-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+                className="flex-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 sm:px-4 rounded-lg transition duration-300 text-sm sm:text-base"
               >
                 Salir
               </button>
