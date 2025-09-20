@@ -9,23 +9,6 @@ import { ALPHABET } from "../lib/constants.js";
 export default function Juego() {
   const router = useRouter();
   const [gameState, setGameState] = useState(() => createGameState());
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Detectar si es dispositivo móvil
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(
-        window.innerWidth <= 768 ||
-          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-            navigator.userAgent
-          )
-      );
-    };
-
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, []);
 
   // Navegar a game-over cuando el juego termine
   useEffect(() => {
@@ -124,28 +107,6 @@ export default function Juego() {
                 </button>
               ))}
             </div>
-
-            {/* Botón para abrir teclado en móviles - solo visible en móviles */}
-            {isMobile && (
-              <div className="text-center mb-4">
-                <button
-                  onClick={() => {
-                    // En móviles, esto debería abrir el teclado virtual
-                    const input = document.createElement("input");
-                    input.type = "text";
-                    input.style.position = "absolute";
-                    input.style.opacity = "0";
-                    input.style.pointerEvents = "none";
-                    document.body.appendChild(input);
-                    input.focus();
-                    setTimeout(() => document.body.removeChild(input), 100);
-                  }}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
-                >
-                  Abrir Teclado
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
